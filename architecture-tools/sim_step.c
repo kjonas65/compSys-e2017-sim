@@ -691,6 +691,7 @@ extern isa_Status sim_step
     CASE(andq_rr): return sim_alu(state, trace, isa_ALUOp_andq, instr.rr.src, instr.rr.dst, anno);
     CASE(xorq_rr): return sim_alu(state, trace, isa_ALUOp_xorq, instr.rr.src, instr.rr.dst, anno);
     CASE(cmpq_rr): return sim_alu(state, trace, isa_ALUOp_cmpq, instr.rr.src, instr.rr.dst, anno);
+    CASE(shrq):    return sim_alu(state, trace, isa_ALUOp_shrq, instr.rr.src, instr.rr.dst, anno);
     CASE(jmp):     return sim_jump(state, trace, instr.i, anno);
     CASE(jle):     return sim_condJump(state, trace, isa_Condition_le, instr.i, anno);
     CASE(jl):      return sim_condJump(state, trace, isa_Condition_l, instr.i, anno);

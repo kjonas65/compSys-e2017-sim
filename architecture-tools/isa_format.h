@@ -48,6 +48,7 @@ static inline size_t isa_sizeofInstruction(isa_Instruction instruction)
         case isa_Opcode_ret:        return 1;
         case isa_Opcode_pushq:      return 2;
         case isa_Opcode_popq:       return 2;
+        case isa_Opcode_shrq:       return 2;
     }
 }
 
@@ -104,6 +105,7 @@ static inline size_t isa_encode(unsigned char * memory, isa_Instruction instruct
         case isa_Opcode_andq_rr:
         case isa_Opcode_xorq_rr:
         case isa_Opcode_cmpq_rr:
+        case isa_Opcode_shrq:
         {
             isa_writeByte(memory + 1, isa_packHalfs(instruction.rr.dst, instruction.rr.src));
             
@@ -227,6 +229,7 @@ static inline size_t isa_decode(unsigned char const * memory, isa_Instruction * 
         case isa_Opcode_andq_rr:
         case isa_Opcode_xorq_rr:
         case isa_Opcode_cmpq_rr:
+        case isa_Opcode_shrq:
         {
             isa_Byte const byte = isa_readByte(memory + 1);
             

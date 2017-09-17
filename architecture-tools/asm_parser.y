@@ -41,6 +41,7 @@ static int yyerror(char const *);
 %token MNM_ANDQ;
 %token MNM_XORQ;
 %token MNM_CMPQ;
+%token MNM_SHRQ;
 %token MNM_JMP;
 %token MNM_JLE;
 %token MNM_JL;
@@ -181,6 +182,11 @@ MNMuction
     | MNM_CMPQ register COMMA register
     {
         asm_IR_addInstruction(yyIR, ISA_CMPQ_RR($2, $4), NULL);
+    }
+    
+    | MNM_SHRQ register COMMA register
+    {
+        asm_IR_addInstruction(yyIR, ISA_SHRQ_RR($2, $4), NULL);
     }
     
     | MNM_JMP IDENTIFIER

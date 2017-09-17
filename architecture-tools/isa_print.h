@@ -52,6 +52,7 @@ static char const * isa_opcodeAsString(isa_Opcode opcode)
         case isa_Opcode_andq_rr:    return "andq";
         case isa_Opcode_xorq_rr:    return "xorq";
         case isa_Opcode_cmpq_rr:    return "cmpq";
+        case isa_Opcode_shrq:       return "shrq";
         case isa_Opcode_jmp:        return "jmp";
         case isa_Opcode_jle:        return "jle";
         case isa_Opcode_jl:         return "jl";
@@ -66,9 +67,9 @@ static char const * isa_opcodeAsString(isa_Opcode opcode)
         case isa_Opcode_cmovge:     return "cmovge";
         case isa_Opcode_cmovg:      return "cmovg";
         case isa_Opcode_call:       return "call";
-        case isa_Opcode_ret:        return "ret";        
-        case isa_Opcode_pushq:      return "pushq";        
-        case isa_Opcode_popq:       return "popq";        
+        case isa_Opcode_ret:        return "ret";
+        case isa_Opcode_pushq:      return "pushq";
+        case isa_Opcode_popq:       return "popq";
     }
 }
 
@@ -183,6 +184,7 @@ static inline void isa_gPrintInstruction(void * ctx, PrintFunction * f, isa_Inst
         case isa_Opcode_andq_rr:
         case isa_Opcode_xorq_rr:
         case isa_Opcode_cmpq_rr:
+        case isa_Opcode_shrq:
             
             f(ctx, "%s %s, %s",
                 isa_opcodeAsString(instruction.opcode),

@@ -22,7 +22,8 @@ typedef enum isa_ALUOp
     isa_ALUOp_subq,                             // Subtraction.
     isa_ALUOp_cmpq,                             // Comparison.
     isa_ALUOp_andq,                             // Logical and.
-    isa_ALUOp_xorq                              // Logical exclusive-or.
+    isa_ALUOp_xorq,                             // Logical exclusive-or.
+    isa_ALUOp_shrq                              // Logical exclusive-or.
 }
 isa_ALUOp;
 
@@ -40,6 +41,7 @@ static inline isa_Quad isa_computeALUOp(isa_ALUOp op, isa_Quad operandA, isa_Qua
         case isa_ALUOp_cmpq: return operandA - operandB;
         case isa_ALUOp_andq: return operandA & operandB;
         case isa_ALUOp_xorq: return operandA ^ operandB;
+        case isa_ALUOp_shrq: return operandA >> operandB;
         
         default: abort();
     }

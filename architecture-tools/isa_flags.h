@@ -95,6 +95,7 @@ static inline isa_Flags isa_computeFlags
             
         case isa_ALUOp_andq:
         case isa_ALUOp_xorq:
+        case isa_ALUOp_shrq:
             
             newFlags.cf = false;
             newFlags.af = false;

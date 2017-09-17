@@ -104,6 +104,7 @@ isa_Instruction;
 #define ISA_ANDQ_RR(_src_, _dst_)        ISA_CONSTRUCTOR(andq_rr, rr, { (_src_), (_dst_) })
 #define ISA_XORQ_RR(_src_, _dst_)        ISA_CONSTRUCTOR(xorq_rr, rr, { (_src_), (_dst_) })
 #define ISA_CMPQ_RR(_src_, _dst_)        ISA_CONSTRUCTOR(cmpq_rr, rr, { (_src_), (_dst_) })
+#define ISA_SHRQ_RR(_src_, _dst_)        ISA_CONSTRUCTOR(shrq,    rr, { (_src_), (_dst_) })
 #define ISA_JMP(_dst_)                   ISA_CONSTRUCTOR(jmp,     i,  (_dst_))
 #define ISA_JLE(_dst_)                   ISA_CONSTRUCTOR(jle,     i,  (_dst_))
 #define ISA_JL(_dst_)                    ISA_CONSTRUCTOR(jl,      i,  (_dst_))

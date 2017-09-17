@@ -6,6 +6,9 @@
 
     .pos 0
     movq stack, %rsp            // Set up the stack pointer.
+    movq $31, %r15              //
+    movq $2, %r14
+    shrq %r14, %r15
     call test
     hlt
     

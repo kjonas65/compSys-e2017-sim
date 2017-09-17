@@ -44,6 +44,7 @@
 "andq"                          { return MNM_ANDQ; }
 "xorq"                          { return MNM_XORQ; }
 "cmpq"                          { return MNM_CMPQ; }
+"shrq"                          { return MNM_SHRQ; }
 "jmp"                           { return MNM_JMP; }
 "jle"                           { return MNM_JLE; }
 "jl"                            { return MNM_JL; }

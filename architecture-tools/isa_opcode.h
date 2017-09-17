@@ -27,6 +27,7 @@ typedef enum isa_Opcode
     isa_Opcode_andq_rr  = 0x62,                 // Logical AND (register-register).
     isa_Opcode_xorq_rr  = 0x63,                 // Logical exclusive OR (register-register).
     isa_Opcode_cmpq_rr  = 0x64,                 // Compare (register-register).
+    isa_Opcode_shrq     = 0x65,                 // Shift right (register-register).
     isa_Opcode_jmp      = 0x70,                 // Jump (immediate).
     isa_Opcode_jle      = 0x71,                 // Conditional jump (less than or equal).
     isa_Opcode_jl       = 0x72,                 // Conditional jump (less than).

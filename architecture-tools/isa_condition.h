@@ -56,9 +56,9 @@ static inline bool isa_checkCondition(isa_Condition condition, isa_Flags flags)
         case isa_Condition_l:   return sf ^ of;
         case isa_Condition_le:  return (sf ^ of) | zf;
         case isa_Condition_a:   return (cf ^ 1) & (zf ^ 1);
-        case isa_Condition_ae:  return (cf ^ 1);
+        case isa_Condition_ae:  return cf ^ 1;
         case isa_Condition_b:   return cf;
-        case isa_Condition_be:  return (cf | zf);
+        case isa_Condition_be:  return cf | zf;
     }
 }
 
