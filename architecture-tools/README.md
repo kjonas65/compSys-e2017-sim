@@ -10,7 +10,7 @@ The code currently generates some warnings due to the parser generators FLEX and
 
 The tools include an assembler `asm` and a simulator `sim`. To assemble a program use the assembler as follows:
 
-    ./asm input-file output-file
+    ./asm input-file [output-file]
 
 E.g.
 
@@ -20,11 +20,13 @@ If you leave out `output-file` the assembler will print out a prettyfied dump of
 
 To simulator an assembled program use the simulator as follows:
 
-    ./sim input-file
+    ./sim input-file [trace-file]
 
 E.g.
 
     ./sim test.out
+
+The `trace-file` argument is optional. If given the simulator will generate a trace-file.
 
 ## Source code layout
 

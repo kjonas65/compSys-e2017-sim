@@ -39,9 +39,9 @@ extern int main(int argc, const char * argv[])
         return EXIT_SUCCESS;
     }
   #else
-    if (argc != 2)
+    if (argc < 2 || argc > 3)
     {
-        printf("Usage: sim input-file\n");
+        printf("Usage: sim input-file [trace-file]\n");
         
         return EXIT_SUCCESS;
     }
@@ -79,15 +79,18 @@ extern int main(int argc, const char * argv[])
     
     // Open trace-file.
     
-    char const * traceFilename = "trace.txt";
+    char const * traceFilename = argv[2];
     
-    traceFile = fopen(traceFilename, "w+");
-    
-    if (traceFile == NULL)
+    if (argc == 3)
     {
-        printf("Couldn't open trace file '%s'\n", inputFilename);
+        traceFile = fopen(traceFilename, "w+");
         
-        goto cleanup;
+        if (traceFile == NULL)
+        {
+            printf("Couldn't open trace file '%s'\n", inputFilename);
+            
+            goto cleanup;
+        }
     }
     
     // Allocate and read memory.
