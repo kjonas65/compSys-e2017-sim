@@ -21,7 +21,6 @@ extern void sim_dumpState
     
     // Dump the registers.
     
-    printf("\n");
     printf("Registers:\n");
     printf("\n");
     

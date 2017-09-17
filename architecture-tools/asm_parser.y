@@ -295,6 +295,7 @@ directive
 
     : ALIGN INT_LITERAL
     {
+        asm_IR_setAlignment(yyIR, $2);
     }
     
     | POSITION INT_LITERAL

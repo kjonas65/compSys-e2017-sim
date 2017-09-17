@@ -29,19 +29,31 @@ extern int main(int argc, const char * argv[])
     
     // Validate input arguments.
     
+  #ifdef USE_ANNOTATION
     if (argc < 2)
-    {
-        printf("Usage: asm input-file [options*]\n");
-        printf("  -nodiff               no diff of result state\n");
+    {  
+        printf("Usage: sim input-file [options*]\n");
         
         annotation_usage();
         
         return EXIT_SUCCESS;
     }
+  #else
+    if (argc != 2)
+    {
+        printf("Usage: sim input-file\n");
+        
+        return EXIT_SUCCESS;
+    }
+  #endif
     
     // Create the annotator.
     
+  #ifdef USE_ANNOTATION
     annotation = create_annotation(argc - 1, argv + 1);
+  #else
+    annotation = NULL;
+  #endif
     
   #if 0
     if (annotation == NULL)
@@ -108,7 +120,7 @@ extern int main(int argc, const char * argv[])
     
     for (int k = 0; k < 1000; k++)
     {
-        status = sim_step(state, traceFile, annotation);
+        status = sim_step(state, annotation, traceFile);
         
         switch (status)
         {
@@ -140,10 +152,12 @@ dump:
     
     sim_dumpState(state, backup);
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         print_annotation(annotation);
     }
+  #endif
     
     // Free resources.
     
@@ -169,10 +183,12 @@ cleanup:
         fclose(inputFile);
     }
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         free_annotation(annotation);
     }
+  #endif
 }
 
 // ---------------------------------------------------------------------------------------------- //

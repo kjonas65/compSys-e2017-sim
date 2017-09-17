@@ -16,30 +16,14 @@
 // - Forward Declarations -
 
 typedef struct Allocator Allocator;
+
 typedef struct asm_Serializer asm_Serializer;
 
 // ---------------------------------------------------------------------------------------------- //
 
-//
-// IR error codes.
-//
-typedef enum asm_IRError
-{
-    asm_IRError_invalidPosition = -1,           // Invalid position error.
-    asm_IRError_invalidAlignment = -2,          // Invalid alignment error.
-    asm_IRError_unknownLabel = -3,              // Unknown label error.
-}
-asm_IRError;
-
-// ---------------------------------------------------------------------------------------------- //
-
-//
-// Prints a IR error to an output file.
-//
-void asm_IRError_print
+typedef void asm_IRErrorCallback
     (
-        asm_IRError,                            // Error code.
-        FILE *                                  // Output file.
+        char const *                            // Error message.
     );
 
 // ---------------------------------------------------------------------------------------------- //
@@ -58,7 +42,8 @@ typedef struct asm_IR asm_IR;
 //
 asm_IR * asm_IR_create
     (
-        Allocator *                             // Allocator. (nonnull)
+        Allocator *,                            // Allocator. (nonnull)
+        asm_IRErrorCallback *                   // Error callback. (nonnull)
     );
 
 // ---------------------------------------------------------------------------------------------- //

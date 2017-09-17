@@ -66,6 +66,7 @@ struct asm_IR
     Entry * head;                               // Entries head. (nullable)
     Entry * tail;                               // Entries tail. (nullable)
     isa_Long size;                              // Size of the IR.
+    asm_IRErrorCallback * errorCallback;        // Error callback.
 };
 
 // ---------------------------------------------------------------------------------------------- //
@@ -183,9 +184,10 @@ static void asm_IR_addEntry(asm_IR * ir, Entry * entry)
 
 // - External Functions -
 
-extern asm_IR * asm_IR_create(Allocator * allocator)
+extern asm_IR * asm_IR_create(Allocator * allocator, asm_IRErrorCallback * errorCallback)
 {
     assert(allocator != NULL);
+    assert(errorCallback != NULL);
     
     asm_IR * ir = Allocator_alloc(allocator, sizeof(asm_IR), 1);
     
@@ -194,6 +196,7 @@ extern asm_IR * asm_IR_create(Allocator * allocator)
     ir->head = NULL;
     ir->tail = NULL;
     ir->size = 0;
+    ir->errorCallback = errorCallback;
     
     return ir;
 }
@@ -220,6 +223,13 @@ void asm_IR_addLabel(asm_IR * ir, char const * label)
     assert(ir != NULL);
     assert(label != NULL);
     
+    // Check if the label already exists.
+    
+    if (asm_Symtab_getLabelAddress(ir->symtab, label) != asm_notAnAddress)
+    {
+        ir->errorCallback("Label defined multiple times.");
+    }
+    
     // Add the label to the symbol table.
     
     asm_Symtab_setLabelAddress(ir->symtab, label, ir->size);
@@ -237,10 +247,31 @@ extern void asm_IR_setAlignment(asm_IR * ir, isa_Long alignment)
 {
     assert(ir != NULL);
     
-    (void) ir;
-    (void) alignment;
+    // Check that 'alignment' is positive.
     
-    // TODO.
+    if (isa_isSigned(alignment))
+    {
+        ir->errorCallback("Alignment must be positive.");
+    }
+    
+    // Check that 'alignment' is a power of two.
+    
+    if ((alignment == 0) || ((alignment & (alignment - 1)) != 0))
+    {
+        ir->errorCallback("Alignment must be a power of two.");
+    }
+    
+    // Compute padding.
+    
+    isa_Long padding = (alignment - (ir->size & (alignment - 1))) & (alignment - 1);
+    
+    // Insert zeroes.
+    
+    Entry * entry = asm_Entry_createWithZeroes(ir->allocator, padding, ir->size);
+    
+    asm_IR_addEntry(ir, entry);
+    
+    ir->size += padding;
 }
 
 extern void asm_IR_addQuad(asm_IR * ir, isa_Quad quad)
@@ -295,7 +326,7 @@ extern void asm_IR_replaceReferenceAddresses(asm_IR * ir)
             
             if (address == asm_notAnAddress)
             {
-                printf("undefined label: %s\n", entry->label);
+                fprintf(stderr, "undefined label: %s\n", entry->label);
                 
                 exit(EXIT_FAILURE);
             }
@@ -364,9 +395,9 @@ extern void asm_IR_serialize(asm_IR const * ir, asm_Serializer const * serialize
                 
                 if (buffer == NULL)
                 {
-                    fprintf(stderr, "Memory allocation error!\n");
+                    fprintf(stderr, "Out of memory!\n");
                     
-                    abort();
+                    exit(EXIT_FAILURE);
                 }
                 
                 isa_Long address = entry->address;
@@ -382,6 +413,8 @@ extern void asm_IR_serialize(asm_IR const * ir, asm_Serializer const * serialize
                         address += 8;
                     }
                 }
+                
+                free(buffer);
                 
                 continue;
             }

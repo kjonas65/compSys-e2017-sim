@@ -13,20 +13,30 @@
 
 // ---------------------------------------------------------------------------------------------- //
 
-static void allocFailureCallback(void)
-{
-    fprintf(stderr, "Out of memory!\n");
-    
-    abort();
-}
-
-// ---------------------------------------------------------------------------------------------- //
-
 extern int yyparse(void);
 extern char const * yyfilename;
 extern FILE * yyin;
+extern int yylineno;
 
 asm_IR * yyIR;
+
+// ---------------------------------------------------------------------------------------------- //
+
+static void allocatorErrorCallback(void * context, int code)
+{
+    (void) context; (void) code;
+    
+    fprintf(stderr, "Out of memory!\n");
+    
+    exit(EXIT_FAILURE);
+}
+
+static void irErrorCallback(char const * message)
+{
+    asm_error(yyfilename, yylineno, 0, "%s\n", message);
+    
+    exit(EXIT_FAILURE);
+}
 
 // ---------------------------------------------------------------------------------------------- //
 
@@ -51,7 +61,7 @@ extern int main(int argc, const char * argv[])
     
     // Create the allocator.
     
-    allocator = Allocator_create(64 * 1024, allocFailureCallback);
+    allocator = Allocator_create(64 * 1024, allocatorErrorCallback, NULL);
     
     if (allocator == NULL)
     {
@@ -95,7 +105,7 @@ extern int main(int argc, const char * argv[])
     
     // Set up the IR.
     
-    yyIR = asm_IR_create(allocator);
+    yyIR = asm_IR_create(allocator, irErrorCallback);
     
     // Parse and encode.
     

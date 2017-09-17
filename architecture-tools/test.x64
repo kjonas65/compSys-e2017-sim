@@ -23,7 +23,8 @@ loop:
     ret
     nop
     nop
-    .align 8
+    nop
+    .align 16
 count:
     .quad 10                    // Count.
     

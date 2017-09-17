@@ -1,22 +1,27 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O1 -std=c11 -pedantic -g
-LCFLAGS = -O1
 LEX = lex
-YACC = yacc -d
+YACC = yacc
 
 all: sim asm
 
-lex.yy.c: asm_lexer.l
+y.tab.c: asm_parser.y
+	$(YACC) -d asm_parser.y
+
+lex.yy.c: asm_lexer.l asm_parser.y
 	$(LEX) asm_lexer.l
 
-y.tab.c: asm_parser.y
-	$(YACC) asm_parser.y
+lex.yy.o: lex.yy.c
+	$(CC) -w -O3 -c lex.yy.c
 
-asm: lex.yy.c y.tab.c isa_* asm_*
-	$(CC) $(CFLAGS) lex.yy.c y.tab.c asm*.c -o asm
+y.tab.o: y.tab.c
+	$(CC) -w -O3 -c y.tab.c
 
-sim: sim_* isa_* ano_*
-	$(CC) $(CFLAGS) ano*.c sim*.c -o sim
+asm: y.tab.o lex.yy.o isa_* asm_*
+	$(CC) $(CFLAGS) lex.yy.o y.tab.o asm*.c -o asm
+
+sim: sim_* isa_*
+	$(CC) $(CFLAGS) sim*.c -o sim
 
 clean:
 	rm -f *.o lex.yy.c y.tab.h y.tab.c asm sim

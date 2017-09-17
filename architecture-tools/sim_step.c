@@ -13,6 +13,8 @@
 
 // ---------------------------------------------------------------------------------------------- //
 
+#ifdef USE_ANNOTATION
+
 static void pp_reg_res(char * buffer, isa_Register reg, isa_Quad value)
 {
     sprintf(buffer,"%s = %"PRIX64, isa_registerAsString(reg), value);
@@ -36,6 +38,8 @@ static void pp_condition(char * buffer, isa_Flags flags)
     sprintf(buffer, "flags = %c%c%c", cz, cs, co);
 }
 
+#endif
+
 // ---------------------------------------------------------------------------------------------- //
 
 static inline isa_Status sim_halt
@@ -48,10 +52,14 @@ static inline isa_Status sim_halt
     (void) state;
     (void) trace;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         note_done(annotation);
     }
+  #else
+    (void) annotation;
+  #endif
     
     return isa_Status_hlt;
 }
@@ -65,11 +73,15 @@ static inline isa_Status sim_noop
 {
     (void) state;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         model_nop(annotation);
         note_done(annotation);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -92,6 +104,7 @@ static inline isa_Status sim_movq_rr
     
     state->registers[dst] = value;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer [64];
@@ -100,6 +113,9 @@ static inline isa_Status sim_movq_rr
         pp_reg_res(buffer, dst, value);
         note_done_reg(annotation, buffer);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -123,6 +139,7 @@ static inline isa_Status sim_movq_ir
     
     state->registers[dst] = value;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer [64];
@@ -131,7 +148,10 @@ static inline isa_Status sim_movq_ir
         pp_reg_res(buffer, dst, value);
         note_done_reg(annotation, buffer);
     }
-    
+  #else
+    (void) annotation;
+  #endif
+   
     if (trace != NULL)
     {
         sim_traceRegisterUpdate(trace, state->cycle, dst, value);
@@ -162,6 +182,7 @@ static inline isa_Status sim_movq_rm
     
     isa_writeQuad(state->memory + address, value);
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer [64];
@@ -170,6 +191,9 @@ static inline isa_Status sim_movq_rm
         pp_mem_res(buffer, state->registers[src]);
         note_done_reg(annotation, buffer);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -201,6 +225,7 @@ static inline isa_Status sim_movq_mr
     
     state->registers[dst] = value;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer [64];
@@ -209,6 +234,9 @@ static inline isa_Status sim_movq_mr
         pp_reg_res(buffer, dst, value);
         note_done_reg(annotation, buffer);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -240,6 +268,7 @@ static inline isa_Status sim_alu
     
     state->flags = isa_computeFlags(state->flags, op, oprnd1, oprnd2, result);
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer1 [64];
@@ -258,6 +287,9 @@ static inline isa_Status sim_alu
             note_done_reg_cc(annotation, buffer2, buffer1);
         }
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -280,11 +312,15 @@ static inline isa_Status sim_jump
     
     state->ip = address;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         model_jmp(annotation, (word_t) address, false /* isConditional */, true /* taken */);
         note_done(annotation);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -317,11 +353,15 @@ static inline isa_Status sim_condJump
         state->ip = address;
     }
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         model_jmp(annotation, (word_t) address, true /* isConditional */, conditionHolds);
         note_done(annotation);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -350,6 +390,7 @@ static inline isa_Status sim_condMove
         state->registers[dst] = value;
     }
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer [64];
@@ -366,6 +407,9 @@ static inline isa_Status sim_condMove
             note_done(annotation);
         }
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -405,6 +449,7 @@ static inline isa_Status sim_call
     
     state->ip = address1;
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer1 [64];
@@ -416,6 +461,9 @@ static inline isa_Status sim_call
         pp_mem_res(buffer2, value);
         note_done_reg_mem(annotation, buffer1, buffer2);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -452,6 +500,7 @@ static inline isa_Status sim_ret
     
     state->ip = address2;
 
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer1 [64];
@@ -460,6 +509,9 @@ static inline isa_Status sim_ret
         pp_reg_res(buffer1, isa_Register_rsp, state->registers[isa_Register_rsp]);
         note_done_reg(annotation, buffer1);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -491,6 +543,7 @@ static inline isa_Status sim_push
     
     isa_writeQuad(state->memory + address, value);
     
+  #ifdef USE_ANNOTATION
     if (annotation != NULL)
     {
         char buffer1 [64];
@@ -501,6 +554,9 @@ static inline isa_Status sim_push
         pp_mem_res(buffer2, value);
         note_done_reg_reg(annotation, buffer1, buffer1);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -533,6 +589,7 @@ static inline isa_Status sim_pop
     
     state->registers[reg] = value;
     
+  #ifdef USE_ANNOTATION
     if (annotation)
     {
         char buffer1 [64];
@@ -543,6 +600,9 @@ static inline isa_Status sim_pop
         pp_reg_res(buffer2, reg, value);
         note_done_reg_reg(annotation, buffer1, buffer2);
     }
+  #else
+    (void) annotation;
+  #endif
     
     if (trace != NULL)
     {
@@ -556,7 +616,12 @@ static inline isa_Status sim_pop
 
 // ---------------------------------------------------------------------------------------------- //
 
-extern isa_Status sim_step(isa_State * restrict state, FILE * trace, Annotation * anno)
+extern isa_Status sim_step
+    (
+        isa_State * restrict state,
+        Annotation * anno,
+        FILE * trace
+    )
 {
     // Increment cycle.
     
@@ -586,6 +651,7 @@ extern isa_Status sim_step(isa_State * restrict state, FILE * trace, Annotation 
     
     // Annotate.
     
+  #ifdef USE_ANNOTATION
     if (anno != NULL)
     {
         char buffer [64];
@@ -594,6 +660,7 @@ extern isa_Status sim_step(isa_State * restrict state, FILE * trace, Annotation 
         
         note_insn(anno, buffer, (word_t) state->ip);
     }
+  #endif
     
     /*
     if (trace != NULL)

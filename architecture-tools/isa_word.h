@@ -32,7 +32,7 @@ static inline bool _isa_signofQuad(isa_Quad q) { return (q & 0x8000000000000000U
 //
 // Returns the sign of a byte, word, long, or quad (interpreted as a signed integer).
 //
-#define isa_signof(__x__)\
+#define isa_isSigned(__x__)\
     _Generic((__x__),\
         isa_Byte: _isa_signofByte,\
         isa_Word: _isa_signofWord,\

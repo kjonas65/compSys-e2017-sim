@@ -7,16 +7,61 @@
 #ifndef __ALLOCATOR_H__
 #define __ALLOCATOR_H__
 
-#include <stddef.h>
+// ---------------------------------------------------------------------------------------------- //
+
+#if 1
+#  include <stddef.h>
+#  define ALLOCATOR_SIZE_T size_t
+#  define ALLOCATOR_SIZE_MAX SIZE_MAX
+#else
+#  include <stdint.h>
+#  define ALLOCATOR_SIZE_T uint8_t
+#  define ALLOCATOR_SIZE_MAX UINT8_MAX
+#endif
+
+//#define ALLOCATOR_DEBUG
 
 // ---------------------------------------------------------------------------------------------- //
 
 //
-// Allocation failure callback.
+// Type-safe allocation macro.
 //
-typedef void Allocator_AllocFailureCallback
+#define ALLOCATOR_ALLOC(__allocator__, __type__)\
+    ((__type__ *) Allocator_alloc(__allocator__, sizeof(__type__), _Alignof(__type__)))
+
+// ---------------------------------------------------------------------------------------------- //
+
+//
+// Allocator error code.
+//
+typedef enum AllocatorErrorCode
+{
+    AllocatorErrorCode_outOfMemory       = -1,  // .
+    AllocatorErrorCode_invalidAlignment  = -2,  // .
+    AllocatorErrorCode_sizeIsTooBig      = -3,  // .
+    AllocatorErrorCode_overflow          = -4,  // .
+}
+AllocatorErrorCode;
+
+// ---------------------------------------------------------------------------------------------- //
+
+//
+// .
+//
+char const * AllocatorErrorCode_asString
     (
-        void
+        AllocatorErrorCode                      // Error code.
+    );
+
+// ---------------------------------------------------------------------------------------------- //
+
+//
+// Allocator error callback.
+//
+typedef void Allocator_ErrorCallback
+    (
+        void *,                                 // Context. (nullable)
+        AllocatorErrorCode                      // Error code.
     );
 
 // ---------------------------------------------------------------------------------------------- //
@@ -29,22 +74,13 @@ typedef struct Allocator Allocator;
 // ---------------------------------------------------------------------------------------------- //
 
 //
-// Creates an allocator.
+// Creates a new allocator.
 //
 Allocator * Allocator_create
     (
-        size_t,                                 // Capacity.
-        Allocator_AllocFailureCallback          // Allocation failure callback.
-    );
-
-// ---------------------------------------------------------------------------------------------- //
-
-//
-// Destroys an allocator.
-//
-void Allocator_destroy
-    (
-        Allocator *                             // Allocator.
+        ALLOCATOR_SIZE_T,                       // Capacity per page.
+        Allocator_ErrorCallback,                // Error callback. (nullable)
+        void *                                  // Error callback context. (nullable)
     );
 
 // ---------------------------------------------------------------------------------------------- //
@@ -54,9 +90,29 @@ void Allocator_destroy
 //
 void * Allocator_alloc
     (
-        Allocator *,                            // Allocator.
-        size_t,                                 // Amount of bytes to allocate.
-        size_t                                  // Alignment.
+        Allocator *,                            // Allocator to allocate with. (nonnull)
+        ALLOCATOR_SIZE_T,                       // Size of block to allocate.
+        ALLOCATOR_SIZE_T                        // Alignment of block to allocate.
+    );
+
+// ---------------------------------------------------------------------------------------------- //
+
+//
+// Resets an allocator.
+//
+void Allocator_reset
+    (
+        Allocator *                             // Allocator to reset. (nonnull)
+    );
+
+// ---------------------------------------------------------------------------------------------- //
+
+//
+// Destroys an allocator.
+//
+void Allocator_destroy
+    (
+        Allocator *                             // Allocator to destroy. (nonnull)
     );
 
 // ---------------------------------------------------------------------------------------------- //

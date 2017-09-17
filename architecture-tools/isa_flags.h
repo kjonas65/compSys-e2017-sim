@@ -67,9 +67,9 @@ static inline isa_Flags isa_computeFlags
 {
     isa_Flags newFlags = oldFlags;
     
-    bool const aSign = isa_signof(operandA);
-    bool const bSign = isa_signof(operandB);
-    bool const rSign = isa_signof(result);
+    bool const aSign = isa_isSigned(operandA);
+    bool const bSign = isa_isSigned(operandB);
+    bool const rSign = isa_isSigned(result);
     
     newFlags.zf = result == 0;
     newFlags.sf = rSign;
