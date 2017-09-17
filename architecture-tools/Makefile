@@ -5,6 +5,8 @@ YACC = yacc
 
 all: sim asm
 
+parser: y.tab.o lex.yy.o
+
 y.tab.c: asm_parser.y
 	$(YACC) -d asm_parser.y
 
@@ -24,4 +26,4 @@ sim: sim_* isa_*
 	$(CC) $(CFLAGS) sim*.c -o sim
 
 clean:
-	rm -f *.o lex.yy.c y.tab.h y.tab.c asm sim
+	rm -f *.o asm sim
