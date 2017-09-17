@@ -9,25 +9,13 @@
 
 // ---------------------------------------------------------------------------------------------- //
 
-#if 1
-#  include <stddef.h>
-#  define ALLOCATOR_SIZE_T size_t
-#  define ALLOCATOR_SIZE_MAX SIZE_MAX
-#else
-#  include <stdint.h>
-#  define ALLOCATOR_SIZE_T uint8_t
-#  define ALLOCATOR_SIZE_MAX UINT8_MAX
-#endif
+#include <stddef.h>
+#include <stdint.h>
+
+#define ALLOCATOR_SIZE_T size_t
+#define ALLOCATOR_SIZE_MAX SIZE_MAX
 
 //#define ALLOCATOR_DEBUG
-
-// ---------------------------------------------------------------------------------------------- //
-
-//
-// Type-safe allocation macro.
-//
-#define ALLOCATOR_ALLOC(__allocator__, __type__)\
-    ((__type__ *) Allocator_alloc(__allocator__, sizeof(__type__), _Alignof(__type__)))
 
 // ---------------------------------------------------------------------------------------------- //
 
