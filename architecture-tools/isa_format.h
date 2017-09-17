@@ -50,6 +50,8 @@ static inline size_t isa_sizeofInstruction(isa_Instruction instruction)
         case isa_Opcode_popq:       return 2;
         case isa_Opcode_shrq:       return 2;
     }
+    
+    abort();
 }
 
 //

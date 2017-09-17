@@ -9,6 +9,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // ---------------------------------------------------------------------------------------------- //
 
@@ -33,6 +34,8 @@ static char const * isa_registerAsString(isa_Register reg)
         case isa_Register_r14: return "%r14";
         case isa_Register_r15: return "%r15";
     }
+    
+    abort();
 }
 
 // ---------------------------------------------------------------------------------------------- //
@@ -71,6 +74,8 @@ static char const * isa_opcodeAsString(isa_Opcode opcode)
         case isa_Opcode_pushq:      return "pushq";
         case isa_Opcode_popq:       return "popq";
     }
+    
+    abort();
 }
 
 // ---------------------------------------------------------------------------------------------- //

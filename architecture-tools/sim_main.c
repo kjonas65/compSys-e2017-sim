@@ -58,7 +58,7 @@ extern int main(int argc, const char * argv[])
   #if 0
     if (annotation == NULL)
     {
-        printf("Could not create the annotator!\n");
+        fprintf(stderr, "Could not create the annotator!\n");
         
         goto cleanup;
     }
@@ -72,7 +72,7 @@ extern int main(int argc, const char * argv[])
     
     if (inputFile == NULL)
     {
-        printf("Couldn't open input-file '%s'\n", inputFilename);
+        fprintf(stderr, "Couldn't open input-file '%s'\n", inputFilename);
         
         goto cleanup;
     }
@@ -87,7 +87,7 @@ extern int main(int argc, const char * argv[])
         
         if (traceFile == NULL)
         {
-            printf("Couldn't open trace file '%s'\n", inputFilename);
+            fprintf(stderr, "Couldn't open trace file '%s'\n", inputFilename);
             
             goto cleanup;
         }
@@ -101,16 +101,19 @@ extern int main(int argc, const char * argv[])
     
     if (state == NULL || backup == NULL)
     {
-        printf("Memory allocation failure.\n");
+        fprintf(stderr, "Memory allocation failure.\n");
         
         goto cleanup;
     }
     
-    fread(state->memory, 1, kMemorySize, inputFile);
+    if (fread(state->memory, 1, kMemorySize, inputFile) == 0)
+    {
+        fprintf(stderr, "Could not read input-file.\n");
+    }
     
     if (getc(inputFile) != EOF)
     {
-        printf("Memory block is not large enough to contain program.\n");
+        fprintf(stderr, "Memory block is not large enough to contain program.\n");
         
         goto cleanup;
     }

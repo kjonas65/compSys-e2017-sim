@@ -629,7 +629,7 @@ extern isa_Status sim_step
     
     // Decode.
     
-    isa_Instruction instr;
+    isa_Instruction instr = ISA_NOP();
     
     size_t size = isa_decode(state->memory + state->ip, &(instr));
     

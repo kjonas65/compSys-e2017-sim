@@ -10,6 +10,7 @@
 #include "isa_flags.h"
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 // ---------------------------------------------------------------------------------------------- //
 
@@ -60,6 +61,8 @@ static inline bool isa_checkCondition(isa_Condition condition, isa_Flags flags)
         case isa_Condition_b:   return cf;
         case isa_Condition_be:  return cf | zf;
     }
+    
+    abort();
 }
 
 // ---------------------------------------------------------------------------------------------- //
