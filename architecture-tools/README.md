@@ -6,13 +6,15 @@ Use `make asm`, `make sim` or just `make`.
 
 ## Usage
 
-The tools include an assembler `asm` and a simulator `sim`. To assemble a program use the assembler as follows:
+The tools include an assembler `asm`, a simulator `sim`, and a trace-prettifier `trace`.
+
+To assemble a program use the assembler as follows:
 
     ./asm input-file [output-file]
 
 E.g.
 
-    ./asm test.x64 test.out
+    ./asm heapsort.x64 heapsort.x64.out
 
 If you leave out `output-file` the assembler will print out a prettyfied dump of the generated code.
 
@@ -22,9 +24,17 @@ To simulate an assembled program use the simulator as follows:
 
 E.g.
 
-    ./sim test.out
+    ./sim heapsort.x64.out heapsort.trace
 
 The `trace-file` argument is optional. If given the simulator will generate a trace-file.
+
+To prettify a trace-file use the trace-prettifier as follows:
+
+    ./trace trace-file
+
+E.g.
+
+    ./trace heapsort.trace
 
 ## Source code layout
 

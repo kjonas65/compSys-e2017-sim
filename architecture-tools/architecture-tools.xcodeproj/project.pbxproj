@@ -36,6 +36,7 @@
 		444A31B21F6E877100821FEA /* test.x64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 444A319B1F6E85D600821FEA /* test.x64 */; };
 		444A31B31F6E877300821FEA /* test_add.x64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 444A31961F6E85D500821FEA /* test_add.x64 */; };
 		444A31B41F6E877800821FEA /* nops.x64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 444A31991F6E85D600821FEA /* nops.x64 */; };
+		44A74F4B1F6FB87C0099EBA3 /* heapsort.x64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A74F4A1F6FB8790099EBA3 /* heapsort.x64 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +76,7 @@
 				444A31B21F6E877100821FEA /* test.x64 in CopyFiles */,
 				444A31B31F6E877300821FEA /* test_add.x64 in CopyFiles */,
 				444A31B41F6E877800821FEA /* nops.x64 in CopyFiles */,
+				44A74F4B1F6FB87C0099EBA3 /* heapsort.x64 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +143,7 @@
 		444A31A01F6E85E400821FEA /* trace */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trace; sourceTree = BUILT_PRODUCTS_DIR; };
 		444A31A81F6E860000821FEA /* trace_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trace_main.c; sourceTree = "<group>"; };
 		444A31A91F6E860000821FEA /* trace_read.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trace_read.h; sourceTree = "<group>"; };
+		44A74F4A1F6FB8790099EBA3 /* heapsort.x64 */ = {isa = PBXFileReference; lastKnownFileType = text; path = heapsort.x64; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,10 +183,11 @@
 			children = (
 				444A31971F6E85D500821FEA /* encoding.txt */,
 				444A31981F6E85D500821FEA /* Makefile */,
-				444A31991F6E85D600821FEA /* nops.x64 */,
 				444A319A1F6E85D600821FEA /* README.md */,
+				444A31991F6E85D600821FEA /* nops.x64 */,
 				444A31961F6E85D500821FEA /* test_add.x64 */,
 				444A319B1F6E85D600821FEA /* test.x64 */,
+				44A74F4A1F6FB8790099EBA3 /* heapsort.x64 */,
 				444A31811F6E85A400821FEA /* ano */,
 				444A31351F6E84D800821FEA /* asm */,
 				444A31521F6E850400821FEA /* isa */,

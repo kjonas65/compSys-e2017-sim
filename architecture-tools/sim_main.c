@@ -55,15 +55,6 @@ extern int main(int argc, const char * argv[])
     annotation = NULL;
   #endif
     
-  #if 0
-    if (annotation == NULL)
-    {
-        fprintf(stderr, "Could not create the annotator!\n");
-        
-        goto cleanup;
-    }
-  #endif
-    
     // Open input-file.
     
     char const * inputFilename = argv[1];
@@ -124,7 +115,7 @@ extern int main(int argc, const char * argv[])
     
     isa_Status status = isa_Status_aok;
     
-    for (int k = 0; k < 1000; k++)
+    for (;;)
     {
         status = sim_step(state, annotation, traceFile);
         

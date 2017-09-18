@@ -124,7 +124,7 @@ extern int main(int argc, const char * argv[])
     {
         asm_IR_serialize(yyIR, &(asm_rawSerializer), outputFile);
     }
-    //else
+    else
     {
         asm_IR_serialize(yyIR, &(asm_textualSerializer), stdout);
     }
