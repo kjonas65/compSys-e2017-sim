@@ -4,8 +4,6 @@
 
 Use `make asm`, `make sim` or just `make`.
 
-The code currently generates some warnings due to the parser generators FLEX and BISON.
-
 ## Usage
 
 The tools include an assembler `asm` and a simulator `sim`. To assemble a program use the assembler as follows:
@@ -18,7 +16,7 @@ E.g.
 
 If you leave out `output-file` the assembler will print out a prettyfied dump of the generated code.
 
-To simulator an assembled program use the simulator as follows:
+To simulate an assembled program use the simulator as follows:
 
     ./sim input-file [trace-file]
 
