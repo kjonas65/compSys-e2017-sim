@@ -6,8 +6,7 @@ YACC = yacc
 all: sim asm trace
 
 parser: asm_lexer.l asm_parser.y
-    $(YACC) -d asm_parser.y
-    $(LEX) asm_lexer.l
+	$(YACC) -d 	$(LEX) asm_lexer.l
 
 lex.yy.o: lex.yy.c
 	$(CC) -w -O3 -c lex.yy.c
@@ -22,7 +21,7 @@ sim: sim_* isa_*
 	$(CC) $(CFLAGS) sim*.c -o sim
 
 trace: trace_* isa_*
-    $(CC) $(CFLAGS) trace*.c -o trace
+	$(CC) $(CFLAGS) trace*.c -o trace
 
 clean:
 	rm -f *.o asm sim
