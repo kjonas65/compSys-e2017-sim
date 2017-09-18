@@ -1,8 +1,10 @@
-# Compsys A2/A3 tools.
+# CompSys Architecture Tools
 
 ## Build
 
-Use `make asm`, `make sim` or just `make`.
+Use `make asm`, `make sim`, `make trace` or just `make`.
+
+Also, to build the parser use `make parser`. Requires FLEX/BISON, but the generated C-sources are already provided with the source code for maximum portability.
 
 ## Usage
 
@@ -44,3 +46,4 @@ The source code is divided into seperate modules as follows:
   2) Files prefixed with `sim_` contains source code for the simulator.
   3) Files prefixed with `isa_` contains source code for the instruction set. (Used by by both the simulator and the assembler.)
   4) Files prefixed with `ano_` contains source code for the annoation library.
+  5) Files prefixed with `trace_` contains source code for the trace-prettifier.
