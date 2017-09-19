@@ -23,7 +23,7 @@ Trace_Type;
 //
 typedef struct Trace_Entry
 {
-    uint64_t cycle;                         // Cycle.
+    uint64_t counter;                       // Instruction #.
     uint64_t type;                          // Type of the entry.
     uint64_t destination;                   // Register or address in memory.
     uint64_t value;                         // Value written into register or memory.
@@ -41,7 +41,7 @@ static inline size_t Trace_read(FILE * file, Trace_Entry entries [], size_t coun
     for (size_t index = 0; index < count; index++)
     {
         if (fscanf(file, "%" PRIX64 " %" PRIX64 " %" PRIX64 " %" PRIX64 "\n",
-               &(entries[index].cycle),
+               &(entries[index].counter),
                &(entries[index].type),
                &(entries[index].destination),
                &(entries[index].value)

@@ -30,8 +30,8 @@ extern int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
     
-    fprintf(stdout, "%6s %8s  %16s  %16s\n", "Cycle:", "Type:", "Destination:", "Value:");
-    fprintf(stdout, "---------------------------------------------------\n");
+    fprintf(stdout, "%12s %8s  %16s  %16s\n", "Instr. #:", "Type:", "Destination:", "Value:");
+    fprintf(stdout, "---------------------------------------------------------\n");
     
     for (;;)
     {
@@ -46,8 +46,8 @@ extern int main(int argc, const char * argv[])
         {
             case Trace_Type_reg:
                 
-                fprintf(stdout, "%6" PRIu64 " %8s  %16s  %016" PRIX64 "\n",
-                    entries[0].cycle,
+                fprintf(stdout, "%12" PRIu64 " %8s  %16s  %016" PRIX64 "\n",
+                    entries[0].counter,
                     "reg",
                     isa_registerAsString((isa_Register) entries[0].destination),
                     entries[0].value
@@ -57,8 +57,8 @@ extern int main(int argc, const char * argv[])
                 
             case Trace_Type_mem:
                 
-                fprintf(stdout, "%6" PRIu64 " %8s  %016" PRIX64 "  %016" PRIX64 "\n",
-                    entries[0].cycle,
+                fprintf(stdout, "%12" PRIu64 " %8s  %016" PRIX64 "  %016" PRIX64 "\n",
+                    entries[0].counter,
                     "mem",
                     entries[0].destination,
                     entries[0].value
@@ -68,8 +68,8 @@ extern int main(int argc, const char * argv[])
 
             case Trace_Type_pc:
                 
-                fprintf(stdout, "%6" PRIu64 " %8s  %16s  %016" PRIX64 "\n",
-                    entries[0].cycle,
+                fprintf(stdout, "%12" PRIu64 " %8s  %16s  %016" PRIX64 "\n",
+                    entries[0].counter,
                     "pc",
                     "",
                     entries[0].value
