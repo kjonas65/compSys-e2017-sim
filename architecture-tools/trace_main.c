@@ -53,7 +53,7 @@ extern int main(int argc, const char * argv[])
                     entries[0].value
                 );
                 
-                break;
+                continue;
                 
             case Trace_Type_mem:
                 
@@ -64,7 +64,7 @@ extern int main(int argc, const char * argv[])
                     entries[0].value
                 );
                 
-                break;
+                continue;
 
             case Trace_Type_pc:
                 
@@ -75,7 +75,7 @@ extern int main(int argc, const char * argv[])
                     entries[0].value
                 );
                 
-                break;
+                continue;
         }
     }
     

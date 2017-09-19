@@ -38,15 +38,8 @@ Trace_Entry;
 //
 static inline size_t Trace_read(FILE * file, Trace_Entry entries [], size_t count)
 {
-    char buffer [256];
-    
     for (size_t index = 0; index < count; index++)
     {
-        if (fgets(buffer, 256, file) == NULL)
-        {
-            return index;
-        }
-        
         if (fscanf(file, "%" PRIX64 " %" PRIX64 " %" PRIX64 " %" PRIX64 "\n",
                &(entries[index].cycle),
                &(entries[index].type),
