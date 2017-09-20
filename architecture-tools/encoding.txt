@@ -35,3 +35,21 @@ Encoding of z (operation in OPq)
 2 = andq
 3 = xorq
 4 = cmpq
+
+Register name to register number mapping:
+rax = 0
+rcx = 1
+rdx = 2
+rbx = 3
+rsi = 4
+rdi = 5
+rsp = 6
+rbp = 7
+r8  = 8
+r9  = 9
+r10 = A
+r11 = B
+r12 = C
+r13 = D
+r14 = E
+r15 = F
