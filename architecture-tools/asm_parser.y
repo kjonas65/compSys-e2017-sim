@@ -144,20 +144,20 @@ MNMuction
         asm_IR_addInstruction(yyIR, ISA_MOVQ_MR(0, $4, $7), $2);
     }
     
-//    | MNM_MOVQ INT_LITERAL LPAREN register RPAREN COMMA register
-//    {
-//        asm_IR_addInstruction(yyIR, ISA_MOVQ_MR($2, $4, $7), NULL);
-//    }
+    | MNM_MOVQ INT_LITERAL LPAREN register RPAREN COMMA register
+    {
+        asm_IR_addInstruction(yyIR, ISA_MOVQ_MR($2, $4, $7), NULL);
+    }
     
 //    | MNM_MOVQ register COMMA IDENTIFIER LPAREN register RPAREN
 //    {
 //        asm_IR_addInstruction(yyIR, ISA_MOVQ_RM($2, $6, 0), $4);
 //    }
     
-//    | MNM_MOVQ register COMMA INT_LITERAL LPAREN register RPAREN
-//    {
-//        asm_IR_addInstruction(yyIR, ISA_MOVQ_RM($2, 0, $7), NULL);
-//    }
+    | MNM_MOVQ register COMMA INT_LITERAL LPAREN register RPAREN
+    {
+        asm_IR_addInstruction(yyIR, ISA_MOVQ_RM($2, $6, $4), NULL);
+    }
     
     | MNM_ADDQ register COMMA register
     {
