@@ -1,12 +1,13 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O1 -std=c11 -pedantic -g
-LEX = lex
-YACC = yacc
+LEX = flex
+YACC = bison
 
 all: sim asm trace
 
 parser: asm_lexer.l asm_parser.y
-	$(YACC) -d 	$(LEX) asm_lexer.l
+	$(LEX) -o lex.yy.c asm_lexer.l
+	$(YACC) -d asm_parser.y -o y.tab.c
 
 lex.yy.o: lex.yy.c
 	$(CC) -w -O3 -c lex.yy.c
