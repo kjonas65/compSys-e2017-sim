@@ -177,11 +177,15 @@ static inline isa_Status sim_movq_rm
     
     if (address >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address);
+        
         return isa_Status_adr;
     }
     
     if ((address & (8-1)) != 0)
     {
+        fprintf(stderr, "unaligned access at: %016" PRIX64, address);
+        
         return isa_Status_uaa;
     }
     
@@ -223,11 +227,15 @@ static inline isa_Status sim_movq_mr
     
     if (address >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address);
+        
         return isa_Status_adr;
     }
     
     if ((address & (8-1)) != 0)
     {
+        fprintf(stderr, "unaligned access at: %016" PRIX64, address);
+        
         return isa_Status_uaa;
     }
     
@@ -351,11 +359,6 @@ static inline isa_Status sim_condJump
 {
     isa_Quad const address = isa_signExtendLongToQuad(i);
     
-    if (address >= state->size)
-    {
-        return isa_Status_adr;
-    }
-    
     bool const conditionHolds = isa_checkCondition(condition, state->flags); 
     
     if (conditionHolds)
@@ -448,8 +451,10 @@ static inline isa_Status sim_call
     
     isa_Quad const address2 = state->registers[isa_Register_rsp];
     
-    if (address1 >= state->size || address2 >= state->size)
+    if (address2 >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address2);
+        
         return isa_Status_adr;
     }
     
@@ -498,15 +503,12 @@ static inline isa_Status sim_ret
     
     if (address1 >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address1);
+        
         return isa_Status_adr;
     }
     
     isa_Quad const address2 = isa_readQuad(state->memory + address1);
-    
-    if (address2 >= state->size)
-    {
-        return isa_Status_adr;
-    }
     
     state->ip = address2;
 
@@ -546,6 +548,8 @@ static inline isa_Status sim_push
     
     if (address >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address);
+        
         return isa_Status_adr;
     }
     
@@ -592,6 +596,8 @@ static inline isa_Status sim_pop
     
     if (address >= state->size)
     {
+        fprintf(stderr, "bad access at: %016" PRIX64, address);
+        
         return isa_Status_adr;
     }
     
@@ -637,6 +643,15 @@ extern isa_Status sim_step
     
     state->cycle += 1;
     
+    // Check that `state->ip` is not out of bounds.
+    
+    if (state->ip > state->size - 6)
+    {
+        fprintf(stderr, "bad access at: %016" PRIX64, state->ip);
+        
+        return isa_Status_adr;
+    }
+    
     // Decode.
     
     isa_Instruction instr = ISA_NOP();
@@ -647,12 +662,9 @@ extern isa_Status sim_step
     
     if (size == 0)
     {
+        fprintf(stderr, "bad instruction at: %016" PRIX64, state->ip);
+        
         return isa_Status_ins;
-    }
-    
-    if (state->ip > state->size - size)
-    {
-        return isa_Status_adr;
     }
     
     // Advance the instruction pointer.

@@ -125,25 +125,15 @@ extern int main(int argc, const char * argv[])
                 
                 continue;
                 
-            case isa_Status_adr:
-                
-                fprintf(stderr, "bad access at: %016" PRIX64 "\n", state->ip);
-                
-                goto cleanup;
-                
             case isa_Status_hlt:
                 
                 goto dump;
                 
+            case isa_Status_adr:
             case isa_Status_ins:
-                
-                fprintf(stderr, "bad instruction at: %016" PRIX64 "\n", state->ip);
-                
-                goto cleanup;
-                
             case isa_Status_uaa:
                 
-                fprintf(stderr, "unaligned memory access at: %016" PRIX64 "\n", state->ip);
+                fprintf(stderr, ", ip = 0x%016" PRIX64 "\n", state->ip);
                 
                 goto cleanup;
         }

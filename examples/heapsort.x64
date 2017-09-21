@@ -133,7 +133,7 @@ heapsort_l2_entry:
     jne heapsort_l2_reentry  // }
     ret
 
-.pos 0x200
+    .pos 0x200
 data_size:
     .quad 100
 data:
