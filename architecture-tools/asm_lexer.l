@@ -37,6 +37,7 @@
 "%"[ \t]*[_a-zA-Z][_a-zA-Z0-9]* { strcpy(yylval.str_val, yytext); return UNKNOWN_REGISTER; }
 
 "hlt"                           { return MNM_HLT; }
+"halt"                          { return MNM_HLT; }
 "nop"                           { return MNM_NOP; }
 "movq"                          { return MNM_MOVQ; }
 "addq"                          { return MNM_ADDQ; }
