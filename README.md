@@ -4,7 +4,7 @@
 
 Use `make asm`, `make sim`, `make trace` or just `make`.
 
-**OPTIONAL**: To build the parser use `make parser`. Requires FLEX/BISON. However, the generated C-sources are already provided with the source code for maximum portability.
+**OPTIONAL**: To build the parser use `make parser`. Requires FLEX/BISON. However, the generated C-sources are already included with the source code for maximum portability.
 
 ## Usage
 
