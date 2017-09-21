@@ -40,7 +40,7 @@ E.g.
 
 ## Assembler-files
 
-An assembler-file consists of *instructions*, *labels*, and *directives*. For a list of the supported instructions, see [Supported Instructions](##Supported-Instructions) at the bottom. Currently, the assembler understands the following directives:
+An assembler-file consists of *instructions*, *labels*, and *directives*. For a list of the supported instructions, see [Supported Instructions](#supported-instructions) at the bottom. Currently, the assembler understands the following directives:
 
 ##### `.align ALIGNMENT`
 
