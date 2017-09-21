@@ -180,6 +180,11 @@ static inline isa_Status sim_movq_rm
         return isa_Status_adr;
     }
     
+    if ((address & (8-1)) != 0)
+    {
+        return isa_Status_uaa;
+    }
+    
     isa_writeQuad(state->memory + address, value);
     
   #ifdef USE_ANNOTATION
@@ -219,6 +224,11 @@ static inline isa_Status sim_movq_mr
     if (address >= state->size)
     {
         return isa_Status_adr;
+    }
+    
+    if ((address & (8-1)) != 0)
+    {
+        return isa_Status_uaa;
     }
     
     isa_Quad const value = isa_readQuad(state->memory + address);
@@ -661,17 +671,6 @@ extern isa_Status sim_step
         note_insn(anno, buffer, (word_t) state->ip);
     }
   #endif
-    
-    /*
-    if (trace != NULL)
-    {
-        char buffer [64];
-        
-        isa_sPrintInstruction(buffer, NULL, instr);
-        
-        fprintf(trace, "\n# %s\n\n", buffer);
-    }
-    */
     
     // Execute.
     
