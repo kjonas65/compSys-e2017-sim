@@ -144,7 +144,7 @@ static unsigned long* cache_op(cache_ptr cache, unsigned long earliest, unsigned
     unsigned long data_ready = earliest + cache->miss_latency;
     for (int q = 0; q < (1<<(cache->block_bits-3)); ++q) {
 	cache->timing[index][0].timing[q] = data_ready;
-	++data_ready;
+	// move entire block in parallel instead of one word at a time //++data_ready;
     }
     return &(cache->timing[index][0].timing[quad]);
 }

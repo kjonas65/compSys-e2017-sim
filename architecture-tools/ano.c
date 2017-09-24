@@ -100,9 +100,9 @@ annotation_ptr create_annotation(int argc, char const * argv [])
 
     // setup configuration:
     res->ddep_only = has_flag("-ddep-only", argc, argv);
-    int pipeline_width = option_with_default("-pw=%d", 4, argc, argv);
+    int pipeline_width = option_with_default("-pw=%d", 1, argc, argv);
     int ooo = has_flag("-ooo", argc, argv);
-    int clat = option_with_default("-clat=%d", 2, argc, argv);
+    int clat = option_with_default("-clat=%d", 3, argc, argv);
     int dlat = 1;
     // default assumption: more than one inst/clock requires additional decode stage
     if (pipeline_width > 1) dlat++;
@@ -749,14 +749,15 @@ void annotation_usage()
     printf("  -t                    trace: print disassembly and result of each instruction\n");
     printf("  -m                    model resource use and estimate timing\n");
     printf("  -c                    print cycle diagram for each instruction (implies -m and -t)\n");
-    printf("  -pw=<width>           width of pipeline (default 4)\n");
+    printf("  -ddep-only            model only data dependencies, ignore actual resource needs\n");
+    printf("  -pw=<width>           width of pipeline (default 1)\n");
     printf("  -ooo                  enable out-of-order scheduling\n");
     printf("  -rob=<size>           give size of reorder buffer (default 128)\n");
     printf("  -cq=<size>            give size of queue/scheduler for cache access (default 32)\n");
     printf("  -xq=<size>            give size of queue/scheduler for execute stage (default 64)\n");
     printf("  -cp=<ports>           number of cache ports and address generators (default: half of -pw)\n");
     printf("  -dlat=<cycles>        latency of decoder (default 1, 2 or 3 dependent on other options)\n");
-    printf("  -clat=<cycles>        latency of cache read (default 2)\n");
+    printf("  -clat=<cycles>        latency of cache read (default 3)\n");
     printf("  -plat=<cycles>        latency of prediction (default 1)\n");
     printf("  -xp=<ports>           number of execution ports (=units) (default: half of -pw +1)\n");
     printf("  -bpred=oracle         select oracle predictor (no mispredictions)\n");

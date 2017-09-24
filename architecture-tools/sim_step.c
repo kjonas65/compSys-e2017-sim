@@ -667,23 +667,22 @@ extern isa_Status sim_step
         return isa_Status_ins;
     }
     
-    // Advance the instruction pointer.
-    
-    state->ip += size;
-    
-    // Annotate.
-    
+    // Annotate. Buffer must be available for duration of sim_step
+    char buffer [64];
+
   #ifdef USE_ANNOTATION
     if (anno != NULL)
     {
-        char buffer [64];
-        
         isa_sPrintInstruction(buffer, NULL, instr);
         
         note_insn(anno, buffer, (word_t) state->ip);
     }
   #endif
-    
+
+    // Advance the instruction pointer. Must be after annotation to
+    // get correct PC in the trace printout
+    state->ip += size;
+        
     // Execute.
     
     switch (instr.opcode)

@@ -70,10 +70,10 @@ extern int main(int argc, const char * argv[])
     
     // Open trace-file.
     
-    char const * traceFilename = argv[2];
-    
-    if (argc == 3)
+    if (argc == 3 && argv[2])
     {
+	char const * traceFilename = argv[2];
+    
         traceFile = fopen(traceFilename, "w+");
         
         if (traceFile == NULL)

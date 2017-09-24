@@ -18,8 +18,8 @@ y.tab.o: y.tab.c
 asm: y.tab.o lex.yy.o isa_* asm_*
 	$(CC) $(CFLAGS) lex.yy.o y.tab.o asm*.c -o asm
 
-sim: sim_* isa_*
-	$(CC) $(CFLAGS) sim*.c -o sim
+sim: sim_* isa_* ano*
+	$(CC) $(CFLAGS) sim*.c ano*.c -o sim
 
 trace: trace_* isa_*
 	$(CC) $(CFLAGS) trace*.c -o trace

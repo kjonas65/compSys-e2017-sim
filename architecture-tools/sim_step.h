@@ -7,7 +7,7 @@
 #ifndef __SIM_STEP_H__
 #define __SIM_STEP_H__
 
-//#define USE_ANNOTATION
+#define USE_ANNOTATION
 
 #ifdef USE_ANNOTATION
 #include "ano.h"
