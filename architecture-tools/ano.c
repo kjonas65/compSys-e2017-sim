@@ -40,7 +40,8 @@ struct annotation_t {
 
     // configuration
     int fetch_latency;
-    int predictor_latency;
+    int predictor_taken_latency;
+    int predictor_not_taken_latency;
     int decode_latency;
     int load_latency;
     int pipe_width;
@@ -113,7 +114,8 @@ annotation_ptr create_annotation(int argc, char const * argv [])
     int cache_ports = option_with_default("-cp=%d", 1, argc, argv);
     int exe_engines = option_with_default("-xp=%d", pipeline_width, argc, argv);
     res->fetch_latency = clat;
-    res->predictor_latency = option_with_default("-plat=%d", 1, argc, argv);
+    res->predictor_taken_latency = option_with_default("-ptlat=%d", 2, argc, argv);
+    res->predictor_not_taken_latency = option_with_default("-pntlat=%d", 1, argc, argv);
     res->decode_latency = dlat;
     res->load_latency = clat;
     res->pipe_width = pipeline_width;
@@ -191,8 +193,8 @@ void print_annotation(annotation_ptr annotation) {
 
     // print additional statistics
     print_cache(annotation->icache);
-    print_predictor(annotation->pred);
-    print_predictor(annotation->ret_pred);
+    print_predictor("Branch predictions:", annotation->pred);
+    print_predictor("Return predictions:", annotation->ret_pred);
     if (annotation->ooo) {
 	print_resource(annotation->rob);
 	print_resource(annotation->scheduler);
@@ -234,7 +236,7 @@ static void print_gridline(annotation_ptr annotation, int force) {
     // everty 8th instruction we need a grid line
     if (force || ((annotation->ins_count % 10) == 0)) {
 	int v = sprintf(buffer, 
-			"-----( %8ld / %8ld)----------------------------------------------", 
+			"-----( %8ld / %8ld)---------------------------------------------------", 
 			annotation->ins_count + force,
 			annotation->first_cycle);
 	if (annotation->first_cycle + 999 < annotation->last_cycle) {
@@ -335,49 +337,49 @@ void note_insn(annotation_ptr annotation, char* pp, word_t pc) {
 void note_done(annotation_ptr annotation) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-40s", annotation->pc, annotation->pp, "");
+	printf("%-4llx %-22s    : %-45s", annotation->pc, annotation->pp, "");
     print_stages(annotation);
 }
 
 void note_done_reg(annotation_ptr annotation, char* reg) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, reg, "");
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, reg, "");
     print_stages(annotation);
 }
 
 void note_done_cc(annotation_ptr annotation, char* cc) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, cc, "");
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, cc, "");
     print_stages(annotation);
 }
 
 void note_done_reg_cc(annotation_ptr annotation, char* reg, char* cc) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, reg, cc);
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, reg, cc);
     print_stages(annotation);
 }
 
 void note_done_mem(annotation_ptr annotation, char* mem) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, mem, "");
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, mem, "");
     print_stages(annotation);
 }
 
 void note_done_reg_reg(annotation_ptr annotation, char* reg1, char* reg2) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, reg1, reg2);
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, reg1, reg2);
     print_stages(annotation);
 }
 
 void note_done_reg_mem(annotation_ptr annotation, char* reg, char* mem) {
     print_gridline(annotation, 0);
     if (annotation->trace)
-	printf("%-4llx %-22s    : %-18s  %-18s  ", annotation->pc, annotation->pp, reg, mem);
+	printf("%-4llx %-22s    : %-23s  %-18s  ", annotation->pc, annotation->pp, reg, mem);
     print_stages(annotation);
 }
 
@@ -593,7 +595,11 @@ void model_jmp(annotation_ptr annotation, word_t next_pc, int is_conditional, in
 	else
 	    correct_prediction = 1;
 	if (is_taken)
-	    resource_use_all(annotation->ifetch, annotation->t_fetch + annotation->predictor_latency);
+	    resource_use_all(annotation->ifetch, 
+			     annotation->t_fetch + annotation->predictor_taken_latency);
+	else
+	    resource_use_all(annotation->ifetch, 
+			     annotation->t_fetch + annotation->predictor_not_taken_latency);
 	if (!correct_prediction)
 	    annotation->t_fetch = exe_start + 1;
 	model_retire(annotation, exe_start + 1);
@@ -612,7 +618,7 @@ void model_call(annotation_ptr annotation, word_t return_pc, word_t target, word
 	note_prepare(annotation, "FDASR");
 	unsigned long exe_start = model_fetch(annotation, annotation->cache_queue, 0);
 	note_call(annotation->ret_pred, return_pc);
-	resource_use_all(annotation->ifetch, annotation->t_fetch + annotation->predictor_latency);
+	resource_use_all(annotation->ifetch, annotation->t_fetch + annotation->predictor_taken_latency);
 	unsigned long done = model_store(annotation, REG_RSP, exe_start, exe_start, push_addr, 1);
 	model_retire(annotation, done + 1);
     }
@@ -630,7 +636,7 @@ void model_ret(annotation_ptr annotation, word_t next_pc, word_t pop_addr) {
 	unsigned long ret_start = model_load(annotation, REG_RSP, exe_start, pop_addr, 1);
 	ret_start = model_exe('J', annotation, annotation->scheduler, annotation->alu_exe, ret_start);
 	int predicted = predict_return(annotation->ret_pred, next_pc);
-	resource_use_all(annotation->ifetch, annotation->t_fetch + annotation->predictor_latency);
+	resource_use_all(annotation->ifetch, annotation->t_fetch + annotation->predictor_taken_latency);
 	if (!predicted)
 	    annotation->t_fetch = ret_start;
 	model_retire(annotation, ret_start + 1);
@@ -758,7 +764,8 @@ void annotation_usage()
     printf("  -cp=<ports>           number of cache ports and address generators (default: half of -pw)\n");
     printf("  -dlat=<cycles>        latency of decoder (default 1, 2 or 3 dependent on other options)\n");
     printf("  -clat=<cycles>        latency of cache read (default 3)\n");
-    printf("  -plat=<cycles>        latency of prediction (default 1)\n");
+    printf("  -ptlat=<cycles>       latency of prediction if flow change (default 2)\n");
+    printf("  -pntlat=<cycles>      latency of prediction if no flow change (default 1)\n");
     printf("  -xp=<ports>           number of execution ports (=units) (default: half of -pw +1)\n");
     printf("  -bpred=oracle         select oracle predictor (no mispredictions)\n");
     printf("  -bpred=taken          select taken predictor\n");

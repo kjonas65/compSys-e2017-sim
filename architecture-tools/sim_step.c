@@ -470,7 +470,7 @@ static inline isa_Status sim_call
         char buffer1 [64];
         char buffer2 [64];
         
-        model_call(annotation, (word_t) state->ip, (word_t) address1, (word_t) address2);
+        model_call(annotation, (word_t) value, (word_t) address1, (word_t) address2);
         
         pp_reg_res(buffer1, isa_Register_rsp, state->registers[isa_Register_rsp]);
         pp_mem_res(buffer2, value);

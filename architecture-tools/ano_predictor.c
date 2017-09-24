@@ -92,9 +92,10 @@ void free_predictor(predictor_ptr predictor) {
     free(predictor);
 }
 
-void print_predictor(predictor_ptr predictor) {
+void print_predictor(const char* name, predictor_ptr predictor) {
     if (predictor->num_predictions) {
-	printf("    Predictions: %ld   hits: %ld   hitrate: %f\n",
+	printf("    %s %ld   hits: %ld   hitrate: %f\n",
+	       name,
 	       predictor->num_predictions,
 	       predictor->num_hits,
 	       predictor->num_hits*1.0 / predictor->num_predictions);

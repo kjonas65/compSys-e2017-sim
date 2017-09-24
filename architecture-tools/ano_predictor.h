@@ -33,7 +33,7 @@ predictor_ptr create_local_predictor(int history_size);
 predictor_ptr create_gshare_predictor(int history_size);
 
 void free_predictor(predictor_ptr);
-void print_predictor(predictor_ptr);
+void print_predictor(const char* name, predictor_ptr);
 
 int train_predictor(predictor_ptr predictor, unsigned long pc, unsigned long target, int is_taken);
 

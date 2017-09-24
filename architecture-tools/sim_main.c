@@ -15,7 +15,7 @@
 // ---------------------------------------------------------------------------------------------- //
 
 // Memory size.
-static size_t const kMemorySize = 0x10000; // 1 MB
+static size_t const kMemorySize = 0x100000; // 1 MB
 
 extern int main(int argc, const char * argv[])
 {
@@ -143,7 +143,7 @@ dump:
     
     // Dump simulator state and changes to the memory.
     
-    sim_dumpState(state, backup);
+    //sim_dumpState(state, backup);
     
   #ifdef USE_ANNOTATION
     if (annotation != NULL)
