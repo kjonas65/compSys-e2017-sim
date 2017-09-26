@@ -15,7 +15,7 @@ ret             0x90
 pushq %a        0xA0 a0
 popq %a         0xB0 a0
 
-Immediates for jcc and call are PC relative.
+Immediates for jcc and call are absolute addresses.
 'i' is little endian (least significant byte first in instruction stream).
 
 Encoding of v (for use in conditional move)
