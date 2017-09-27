@@ -90,7 +90,7 @@ static inline isa_Flags isa_computeFlags
             
             newFlags.cf = result < operandA;
             newFlags.af = ((operandA ^ operandB ^ result) & 0x10) != 0;
-            newFlags.of = (aSign != bSign) && (rSign != aSign);
+            newFlags.of = (aSign != bSign) && (rSign == aSign);
             
             return newFlags;
             
